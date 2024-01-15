@@ -6,11 +6,11 @@ const session = require('express-session');
 const cors = require('cors');
 const dotenv = require('dotenv').config();
 const Stripe = require('stripe');
+const path = require('path');
 
 // Local imports
 const db = require('./database/db.js');
 const rout = require('./routes/router');
-const path = require('path');
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server); // Create a Socket.IO server instance and attach it to the server
@@ -45,11 +45,7 @@ app.use(
   })
 );
 
-app.use(express.static("./frontend/build"));
 
-app.get("*",(req,res) => {
-  res.sendFile(path.resolve(__dirname,"frontend","build","index.html"));
-});
 app.use((req, res, next) => {
   res.locals.message = req.session.message;
   delete req.session.message;
@@ -85,12 +81,22 @@ io.on('connection', (socket) => {
   });
 });
 
-// Create a route for creating invoices
+if(process.env.NODE_ENV === "production"){
+  app.use(express.static(path.join(__dirname,'../frontend/build')));
 
-const port = 4000;
+  app.get("*",(req,res) => {
+    res.sendFile(path.join(__dirname,'frontend','build','index.html'));
+  })
+}
+else {
+  app.get("/",(req,res) => {
+    res.send("Api running");
+  })
+}
 
-server.listen(port, () => {
-  console.log('Server is running on port ' + port);
+
+server.listen(process.env.PORT, () => {
+  console.log('Server is running on port ' +process.env.PORT);
 });
 
 

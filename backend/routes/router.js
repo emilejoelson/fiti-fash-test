@@ -10,10 +10,6 @@ const prod=require('../controllers/Controller');
 const fileUpload=require('../utils/fileUpload');
 //Router
 
-router.get("/",(req,res,next)=>{
-    res.send("ANDRIAMIHAJA Joelson Emile ");
-});
-
 //Concernant le user
 router.post("/signup",prod.singup);
 router.post("/login",prod.login);

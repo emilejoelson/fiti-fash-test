@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "node index.js",
+    "herokupost-build":"NPM_CONFIG_PRODUCTION=false npm install --prefix frontend npm run build --prefix frontend",
     "test": "mocha --exit ./test/index.test.js",
     "coverage": "nyc --reporter=lcov --reporter=text mocha ./test/index.test.js && nyc report --reporter=text-summary",
     "sonar": "sonar-scanner"
